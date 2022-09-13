@@ -7,7 +7,6 @@ world.height = world.clientHeight;
 let frames = 0;
 const missiles = [];
 
-// defini l'état par defaut des touches
 const keys = {
   ArrowLeft: { pressed: false },
   ArrowRight: { pressed: false },
@@ -15,25 +14,36 @@ const keys = {
 
 class Player {
   constructor() {
-    this.width = 32; //largeur du joueur
-    this.height = 32; //hauteur du joueur
+    this.width = 32;
+    this.height = 32;
     this.velocity = {
-      x: 0, //vitesse de deplassement
+      x: 0,
       y: 0,
     };
-    this.position = {
-      x: (world.width - this.width) / 2, //position par defaut
-      y: world.height - this.height,
+
+    const image = new Image();
+    image.src = "./space-invaders.png";
+    image.onload = () => {
+      this.image = image;
+      this.width = 48;
+      this.height = 48;
+      this.position = {
+        x: world.width / 2 - this.width / 2,
+        y: world.height - this.height - 10,
+      };
     };
   }
 
-  // le joueur sera un carré blanc
   draw() {
-    c.fillStyle = "white";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    c.drawImage(
+      this.image,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
   }
 
-  //   tir
   shoot() {
     missiles.push(
       new Missile({
@@ -41,35 +51,32 @@ class Player {
           x: this.position.x + this.width / 2,
           y: this.position.y,
         },
-        // velocity: {
-        //   x: 0,
-        //   y: -5,
-        // },
       })
     );
   }
 
-  // a chaque mise a jour on dessine le joueur
   update() {
-    if (keys.ArrowLeft.pressed && this.position.x >= 0) {
-      this.velocity.x = -5;
-    } else if (
-      keys.ArrowRight.pressed &&
-      this.position.x <= world.width - this.width
-    ) {
-      this.velocity.x = 5;
-    } else {
-      this.velocity.x = 0;
+    if (this.image) {
+      if (keys.ArrowLeft.pressed && this.position.x >= 0) {
+        this.velocity.x = -5;
+      } else if (
+        keys.ArrowRight.pressed &&
+        this.position.x <= world.width - this.width
+      ) {
+        this.velocity.x = 5;
+      } else {
+        this.velocity.x = 0;
+      }
+      this.position.x += this.velocity.x;
+      this.draw();
     }
-    this.position.x += this.velocity.x;
-    this.draw();
   }
 }
 
 class Missile {
   constructor({ position }) {
     this.position = position;
-    this.velocity = { x: 0, y: -5 };
+    this.velocity = { x: 0, y: -10 };
     this.width = 2;
     this.height = 10;
   }
@@ -78,6 +85,7 @@ class Missile {
     c.fillStyle = "red";
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
+
   update() {
     this.position.y += this.velocity.y;
     this.draw();
@@ -86,7 +94,6 @@ class Missile {
 
 const player = new Player();
 
-// boucle animation
 const animationLoop = () => {
   requestAnimationFrame(animationLoop);
   c.clearRect(0, 0, world.width, world.height);
@@ -125,6 +132,5 @@ addEventListener("keyup", (event) => {
       break;
     case " ":
       player.shoot();
-      console.log(missiles);
   }
 });
