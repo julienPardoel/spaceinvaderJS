@@ -12,5 +12,6 @@ body{
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
-    border: 2px dotted white;
+    border: 2px solid blue;
+    border-radius: 10px;
 }
