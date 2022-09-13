@@ -5,6 +5,7 @@ world.width = world.clientWidth;
 world.height = world.clientHeight;
 
 let frames = 0;
+const missiles = [];
 
 // defini l'état par defaut des touches
 const keys = {
@@ -32,6 +33,22 @@ class Player {
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 
+  //   tir
+  shoot() {
+    missiles.push(
+      new Missile({
+        position: {
+          x: this.position.x + this.width / 2,
+          y: this.position.y,
+        },
+        // velocity: {
+        //   x: 0,
+        //   y: -5,
+        // },
+      })
+    );
+  }
+
   // a chaque mise a jour on dessine le joueur
   update() {
     if (keys.ArrowLeft.pressed && this.position.x >= 0) {
@@ -49,14 +66,40 @@ class Player {
   }
 }
 
+class Missile {
+  constructor({ position }) {
+    this.position = position;
+    this.velocity = { x: 0, y: -5 };
+    this.width = 2;
+    this.height = 10;
+  }
+
+  draw() {
+    c.fillStyle = "red";
+    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+  update() {
+    this.position.y += this.velocity.y;
+    this.draw();
+  }
+}
+
 const player = new Player();
-// player.draw();
 
 // boucle animation
 const animationLoop = () => {
   requestAnimationFrame(animationLoop);
   c.clearRect(0, 0, world.width, world.height);
   player.update();
+  missiles.forEach((missile, index) => {
+    if (missile.position.y + missile.height <= 0) {
+      setTimeout(() => {
+        missiles.splice(index, 1);
+      }, 0);
+    } else {
+      missile.update();
+    }
+  });
   frames++;
 };
 animationLoop();
@@ -73,7 +116,6 @@ addEventListener("keydown", ({ key }) => {
 });
 
 addEventListener("keyup", (event) => {
-  //   console.log(event);
   switch (event.key) {
     case "ArrowLeft":
       keys.ArrowLeft.pressed = false;
@@ -81,5 +123,8 @@ addEventListener("keyup", (event) => {
     case "ArrowRight":
       keys.ArrowRight.pressed = false;
       break;
+    case " ":
+      player.shoot();
+      console.log(missiles);
   }
 });
