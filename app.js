@@ -18,7 +18,7 @@ class Player {
     };
 
     const image = new Image();
-    image.src = "./space-invaders.png";
+    image.src = "./space-invaders (1).png";
     image.onload = () => {
       this.image = image;
       this.width = 48;
@@ -73,7 +73,7 @@ class Alien {
   constructor({ position }) {
     this.velocity = { x: 0, y: 0 };
     const image = new Image();
-    image.src = "./alien.png";
+    image.src = "./aliens.png";
     image.onload = () => {
       this.image = image;
       this.width = 32;
@@ -150,7 +150,7 @@ class Grid {
     this.position = { x: 0, y: 0 };
     this.velocity = { x: 1, y: 0 };
     this.invaders = [];
-    let rows = Math.floor((world.height / 34) * (1 / 5));
+    let rows = Math.floor((world.height / 34) * (1 / 6));
     const columns = Math.floor((world.width / 34) * (2 / 5));
     this.height = rows * 34;
     this.width = columns * 34;
@@ -212,7 +212,7 @@ class alienMissile {
     this.height = 10;
   }
   draw() {
-    c.fillStyle = "red";
+    c.fillStyle = "#7F00FF";
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
     c.fill();
   }
@@ -287,7 +287,7 @@ const animationLoop = () => {
                   y: (Math.random() - 0.5) * 2,
                 },
                 radius: Math.random() * 5 + 1,
-                color: "red",
+                color: "#7F00FF",
               })
             );
           }
@@ -354,7 +354,9 @@ animationLoop();
 const lostLife = () => {
   lifes--;
   if (lifes <= 0) {
-    alert("perdu");
+    alert("Game Over !");
+    alert("Pour Rejouer, click sur OK");
+
     init();
   }
 };

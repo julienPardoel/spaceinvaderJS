@@ -1,17 +1,18 @@
-body{
-    margin: 0;
-    padding: 0;
-    background: rgb(73, 73, 73);
-    width: 100%;
-    text-align: center;
+* {
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: radial-gradient(#ddcead, #daa520);
 }
 
-#gameBoard{
-    width: 80%;
-    height: 80vh;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border: 2px solid blue;
-    border-radius: 10px;
+#gameBoard {
+  border: 5px solid #daa250;
+  border-radius: 10px;
+  background: black no-repeat 50% url(./insert2.jpg);
+  box-shadow: black 3px 3px 6px;
 }
